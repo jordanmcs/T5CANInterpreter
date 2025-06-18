@@ -1,0 +1,12 @@
+Creative Commons Attribution-NonCommercial 4.0 International Public License
+
+By exercising the Licensed Rights (defined below), You accept and agree to be bound by the terms and conditions of this Creative Commons Attribution-NonCommercial 4.0 International Public License ("Public License").
+
+You can view the full license at:
+https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+Summary:
+- You are free to share and adapt the material for non-commercial purposes only, with attribution.
+- You must give appropriate credit and indicate if changes were made.
+- You may not use the material for commercial purposes.
+- No warranties are given.
