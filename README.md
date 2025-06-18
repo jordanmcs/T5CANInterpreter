@@ -1,4 +1,4 @@
-# T5CANInterpreter
+# T5 CAN Interpreter
 Trionic5 CANBUS interface using the ASL CAN X2 Dev board. 
 https://www.autosportlabs.com/product/esp32-can-x2-dual-can-bus-automotive-grade-development-board/
 
