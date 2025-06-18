@@ -1,10 +1,10 @@
 # T5 CAN Interpreter
-Trionic5 CANBUS interface using the ASL CAN X2 Dev board. 
-https://www.autosportlabs.com/product/esp32-can-x2-dual-can-bus-automotive-grade-development-board/
+Trionic5 CANBUS interface using the [ASL CAN X2 Dev board](https://www.autosportlabs.com/product/esp32-can-x2-dual-can-bus-automotive-grade-development-board/). 
 
-For creating an interface module to be able to read CAN data from Trionic 5 ECUs at their weird-ass bitrate of 615k
+## Purpose
+For creating an interface module to be able to read data from Trionic 5 ECUs over its native CANBUS protocol ,at their weird-ass bitrate of 615Kbs
 
-The ASL dev board has two CANBUS channels one using the onboard ESP32 module as well as an additional MCP2515 controller. This should allow translation of the CANBUS data to a more common standard for use in a range of commercial devices or to be able to build your own display.
+The ASL dev board has two CANBUS channels one using the onboard ESP32 module as well as an additional MCP2515 controller. This should allow translation of the T5 data to a more common CANBUS standard for use in a range of commercially available devices (gauges, dashboards etc) or to be able to build your own display(s) -- my current project.
 
 The current state of the devices is to:
 
@@ -13,13 +13,15 @@ The current state of the devices is to:
 3. Parse the data and convert to JSON string to send over the ESP-NOW protocol to act as a infomation hub for other ESP32 clients (Displays)
 
 
-Arduino Boards Requirements:
-ESP32  <Espressif Systems>
+#### Arduino Boards Requirements:
+- ESP32  by Espressif Systems
 
-Arduino Library Requirements:
-mcp_canbus <coryjfowler>
-ArduinoJSON <benoit Blanchon>
+#### Arduino Library Requirements:
+- mcp_canbus by coryjfowler
+- ArduinoJSON by benoit Blanchon
 
+
+### ECU CANBUS wiring
 You can tie into the wired OBD2 port using a OBD2 male plug wired to the ASL board CAN2 interface.
 Trionic 5 uses CANH on ECU #62 and CANL on #63
 
