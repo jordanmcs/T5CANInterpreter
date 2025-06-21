@@ -110,8 +110,7 @@ void configureT5Baud() {
   Serial.println("Resetting MCP2515...");
   resetMCP2515();
   if (CAN.begin(MCP_ANY, CAN_500KBPS, MCP_16MHZ) == CAN_OK) {
-    //if (CAN.begin( CAN_500KBPS) == CAN_OK) {
-    delay(10);
+   // delay(250);
 
     // Put MCP2515 into configuration mode (0x80)
     writeRegister(MCP_CANCTRL, 0x80);
@@ -126,7 +125,7 @@ void configureT5Baud() {
 
     // Switch back to normal mode (0x00)
     writeRegister(MCP_CANCTRL, 0x00);
-    delay(10);
+    delay(250);
     Serial.println("MCP_CAN mode set to Normal.");
 
     // Send symbol table request and receive response
@@ -194,12 +193,18 @@ void onSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 // main program
 void setup() {
   Serial.begin(115200);
+  delay(3000);  // Wait 5 seconds for ECU to come online
+
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH); //set LED off
+
   configureT5Baud();  //set CANBUS Speed on MCP2515 to match Trionic 5
 
   //UART
   //Serial1.begin(38400, SERIAL_8N1, RX_PIN, TX_PIN); for hardwire
 
   WiFi.mode(WIFI_STA);
+  
   if (esp_now_init() != ESP_OK) {
     Serial.println("ESP-NOW init failed");
     return;
@@ -215,6 +220,7 @@ void setup() {
 
   if (!esp_now_add_peer(&peerInfo)) {
     Serial.println("Peer added.");
+
   } else {
     Serial.println("Failed to add peer");
   }
@@ -230,6 +236,8 @@ void loop() {
   unsigned long now = millis();
   bool anyData = false;
   StaticJsonDocument<250> stream;
+
+  digitalWrite(LED_BUILTIN, HIGH); //turn LED OFF when started
 
 
   // Once done, do nothing or add other code here
@@ -265,6 +273,8 @@ void loop() {
   if (anyData) {
     serializeJson(stream, outgoingMsg.jsonData);
     esp_now_send(receiverMAC, (uint8_t *)&outgoingMsg, sizeof(outgoingMsg));
+    digitalWrite(LED_BUILTIN, LOW); //turn LED on when sending data
+
    // Serial.print(sizeof(outgoingMsg));
    //Serial.print(" : ");
     Serial.println(outgoingMsg.jsonData);
