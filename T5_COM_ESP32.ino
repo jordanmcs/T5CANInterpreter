@@ -53,7 +53,8 @@ MCP_CAN CAN(CAN_CS_PIN);
 
 //ASL Mac address 74:4D:BD:89:AB:98
 //WS Display Mac address CC:BA:97:11:CB:28
-uint8_t receiverMAC[] = {0xCC, 0xBA, 0x97, 0x11, 0xCB, 0x28};
+uint8_t receiverMAC[]  = {0xCC, 0xBA, 0x97, 0x11, 0xCB, 0x28};  // 2.1" gauge (Waveshare)
+uint8_t receiverMAC2[] = {0xCC, 0xBA, 0x97, 0x11, 0x0E, 0x28};  // 1.85" gauge (Waveshare)
 
 // symbolMap: {label, symbolId, sram_addr, byte_length, scaler, adder,
 //             pollInterval, minVal, maxVal}
@@ -219,7 +220,12 @@ bool initEspNow() {
   peerInfo.channel = 0;
   peerInfo.encrypt = false;
   if (esp_now_add_peer(&peerInfo) != ESP_OK) {
-    Serial.println("[ESPNOW] add peer failed");
+    Serial.println("[ESPNOW] add peer 1 failed");
+    return false;
+  }
+  memcpy(peerInfo.peer_addr, receiverMAC2, 6);
+  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+    Serial.println("[ESPNOW] add peer 2 failed");
     return false;
   }
   Serial.printf("[ESPNOW] ready. own MAC %s, channel %d\n",
@@ -409,6 +415,7 @@ void loop() {
     } else if (espNowReady) {
       serializeJson(stream, outgoingMsg.jsonData);
       esp_now_send(receiverMAC, (uint8_t *)&outgoingMsg, sizeof(outgoingMsg));
+      esp_now_send(receiverMAC2, (uint8_t *)&outgoingMsg, sizeof(outgoingMsg));
       digitalWrite(BOARD_LED, LOW);
       Serial.println(outgoingMsg.jsonData);
     }
