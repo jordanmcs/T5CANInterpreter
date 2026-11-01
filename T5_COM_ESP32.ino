@@ -74,6 +74,9 @@ struct SymbolMap {
 SymbolMap symbolsToPoll[] = {
   { "Batt",   "Batt_volt", 0x101B, 1, 0.1f,    0.0f,   250,  10.0f,  18.9f },
   { "RPM",    "Rpm",       0x1066, 2, 10.0f,   0.0f,    50,   0.0f, 7500.0f },
+  // Final injector pw for FuelEdu (bus domain: ms — T5Suite CSV convention).
+  // 0 is legitimate (decel cut); 130 ms is the ECU's own per-cycle pw clamp.
+  { "InjPw",  "Insptid_ms10", 0x1062, 2, 0.1f,  0.0f,    50,   0.0f,  130.0f },
   { "Water",  "Kyl_temp",  0x102E, 1, 1.0f,    0.0f,  1000,   5.0f, 135.0f },
   { "Air",    "Lufttemp",  0x1033, 1, 1.0f,    0.0f,   250, -40.0f,  70.0f },
   { "NBo2",   "AD_sond",   0x1012, 1, 10.0f,   0.0f,   100,   0.0f, 200.0f },
@@ -83,7 +86,9 @@ SymbolMap symbolsToPoll[] = {
   { "Gear",   "Gear",      0x3355, 1, 1.0f,    0.0f,   250,   0.0f,   6.0f },
   { "Speed",  "Bil_hast",  0x101C, 1, 1.0f,    0.0f,   150,   0.0f, 255.0f },
   { "APC",    "PWM_ut10",  0x3359, 1, 10.0f,   0.0f,   100,   0.0f, 1100.0f },
-  { "Torque", "TQ",        0x1074, 1, 1.0f,    0.0f,   200, -200.0f, 300.0f },
+  // TQ = torque estimate, 2-byte word @0x1074/75 (Function_00071D12: Last x 278/127 - 21,
+  // clamped 13..30 by flag states -> WOT ~280s = Nm scale; was 1-byte until 2026-11).
+  { "Torque", "TQ",        0x1074, 2, 1.0f,    0.0f,   200,   0.0f,  600.0f },
   { "Load",   "Medellast", 0x1037, 1, 1.0f,    0.0f,   200,   0.0f, 300.0f },
 };
 
